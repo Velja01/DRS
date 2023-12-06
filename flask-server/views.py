@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, render_template
 from database.ReadPosts import get_posts_data
 from classes.post import Post
 views = Blueprint(__name__, "views")
@@ -6,7 +6,7 @@ views = Blueprint(__name__, "views")
 # Primer podataka (za ilustraciju)
 #posts_data = get_posts_data()
 
-@views.route("/")
+@views.post("/")
 def home():
     posts_data = get_posts_data()
     posts = [
@@ -23,3 +23,6 @@ def home():
     ]
 
     return jsonify({"posts": posts})
+@views.get("/")
+def getHome():
+    return render_template("C:/Users/veljk/Desktop/drsvezba/drsvezba/flask-server/template/pocetna/index.html")

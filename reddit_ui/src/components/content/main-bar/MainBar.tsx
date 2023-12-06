@@ -7,6 +7,7 @@ import {FaChevronDown} from "react-icons/fa"
 import { FaArrowTrendUp } from "react-icons/fa6";
 import { BsThreeDots } from "react-icons/bs";
 import { MdMenu } from "react-icons/md";
+import Posts from "../../posts/Posts";
 
 export default function MainBar(){
     return( 
@@ -38,6 +39,8 @@ export default function MainBar(){
                 <FaChevronDown/>
             </div>
         </div>
+        <Posts/>
+
     </div>
     )
 }
