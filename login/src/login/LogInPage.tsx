@@ -1,52 +1,42 @@
 // LoginPage.tsx
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import './LogInPage.css';
 
-interface User {
-  id: number;
-  ime: string;
-  prezime: string;
-  adresa: string;
-  grad: string;
-  drzava: string;
-  broj_telefona: string;
-  email: string;
-  lozinka: string;
-}
+
 
 
 export default function LogInPage() {
-  const [data, setData] = useState<User[]>([]);
+  
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage]=useState('');
 
-  useEffect(() => {
-    fetch("http://localhost:5000/api/login")
-      .then(res => res.json())
-      .then((responseData:{users:User[]}) => {
-        setData(responseData.users);
-        console.log(responseData);
-      })
-      .catch(error => {
-        console.error('Greška pri dohvatanju podataka:', error);
-      });
-  }, []);
- // ...
+  
 
-const handleLogin = () => {
-  // Provera da li postoji korisnik sa datim username i password
-  const userExists = data.some(user => user.email === username && user.lozinka === password);
+ const handleLogin = async () => {
+  try {
+    // Napravite objekat sa podacima koje želite poslati na server
+    const requestData = {
+      username: username,
+      password: password,
+    };
 
-  if (userExists) {
-    console.log('Korisnik pronađen!');
-    setMessage('');
-    
-  } else {
-    console.log('Korisnik nije pronađen.');
-    setMessage('korisnik nije pronadjen');
+    const odgovor = await fetch("http://localhost:5000/api/login", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(requestData),
+    });
+
+    const rezultat = await odgovor.json();
+    setMessage(rezultat.message);
+    console.log(rezultat);
+  } catch (error) {
+    console.error('Greška pri slanju podataka na server:', error);
   }
 };
+
 
 // ...
 

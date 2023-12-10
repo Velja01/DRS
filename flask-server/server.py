@@ -31,8 +31,9 @@ def home():
 
     return jsonify({"posts": posts})
 
-@app.get("/api/login")
+@app.route("/api/login", methods=['POST', 'GET'])
 def login():
+    
     users_data=get_users_data()
 
     users = [
@@ -48,9 +49,27 @@ def login():
         "lozinka": user.lozinka
     } for user in users_data
 ]
+    data=request.get_json()
+    username=data.get('username')
+    password=data.get('password')
+
+    pronadjenMail =False;
+    pronadjenPass=False;
+    message="";
+    for user in users:
+        if user["email"]==username:
+            pronadjenMail=True;
+            if user["lozinka"]==password:
+                pronadjenPass=True;
+    if not pronadjenMail:
+        message= "Korisnik sa tim username-om ne postoji u bazi podataka"
     
+    if not pronadjenPass:
+        message= "Korisnik sa tim password-om ne postoji u bazi podataka"
+    if pronadjenMail and pronadjenPass:
+        return jsonify(message="uspesno")
     return jsonify(
-       {"users":users}
+       message=message
     )
 
 @app.get("/")
