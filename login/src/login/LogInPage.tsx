@@ -56,7 +56,8 @@ export default function LogInPage() {
       />
       <br />
       <button onClick={handleLogin}>Log In</button>
-      <div>{message}</div>
+      <div>{message}</div><br/>
+      <div><a href='/'><button>Back to Main Page</button></a></div>
       
     </div>
   );

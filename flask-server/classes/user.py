@@ -11,3 +11,18 @@ class User:
         self.broj_telefona = broj_telefona
         self.email = email
         self.lozinka = lozinka
+        
+    def to_tuple(self):
+        # Pretvaranje atributa klase u tuple za unos u bazu
+        return (
+            
+            self.ime,
+            self.prezime,
+            self.adresa,
+            self.grad,
+            self.drzava,
+            self.broj_telefona,
+            self.email,
+            self.lozinka
+        )
+    

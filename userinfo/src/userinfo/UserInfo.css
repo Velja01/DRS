@@ -1,0 +1,30 @@
+/* SignUp.css */
+
+/* Stil za kontejner forme */
+.form-container {
+    display: flex;
+    flex-direction: column;
+    max-width: 150px;
+    margin: auto;
+  }
+  
+  /* Stil za labelu */
+  .form-label {
+    margin-bottom: 5px;
+  }
+  
+  /* Stil za input polje */
+  .form-input {
+    margin-bottom: 10px;
+  }
+  
+  /* Stil za dugme */
+  .form-button {
+    margin-top: 10px;
+  }
+  
+  /* Stil za poruku */
+  .form-message {
+    margin-top: 10px;
+  }
+  

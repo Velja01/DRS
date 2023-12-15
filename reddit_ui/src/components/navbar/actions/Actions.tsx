@@ -21,10 +21,10 @@ export default function Actions(){
     }
     return <div className="actions">
         <a href="/LogIn"><Button label="LOG IN" onClick={onclickLogIn}/></a>
-        <Button primary label="SIGN UP" onClick={onclickSignUp}/>
+        <a href="/SignUp"><Button label="SIGN UP" onClick={onclickSignUp}/></a>
         <div className="profile hoverable">
             
-            <CgProfile className="hoverable" size={35} onClick={onclickProfile}/>
+            <a href="/UserInfo"><CgProfile className="hoverable" size={35} onClick={onclickProfile}/></a>
             
         </div>
     </div>
