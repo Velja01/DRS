@@ -2,8 +2,10 @@ from flask import Flask, g, request, jsonify, render_template
 from flask_cors import CORS
 from database.ReadPosts import get_posts_data
 from database.ReadUsers import get_users_data
+from database.WritePost import insert_post
 from views import views
 from classes.user import User
+from classes.post import Post
 from database.WriteUser import insert_user, update_user
 app = Flask(__name__, static_url_path="/assets",
             static_folder="assets", template_folder="template")
@@ -21,7 +23,9 @@ def SignUp():
 @app.route("/UserInfo")
 def UserInfo():
     return render_template("userinfo/index.html");
-
+@app.route("/AddTheme")
+def AddTheme():
+    return render_template("addtheme/index.html")
 @app.get("/api/posts")
 def home():
     posts_data = get_posts_data()
@@ -34,7 +38,8 @@ def home():
         "created_at": post.created_at,
         "upvotes": post.upvotes,
         "downvotes": post.downvotes,
-        "comments": post.comments
+        "comments": post.comments,
+        "user_id":post.user_id
     } for post in posts_data
     ]
 
@@ -189,5 +194,26 @@ def changeUserInfo():
 
     update_user(u)
     return jsonify(message="Izmenili ste vrednosti korisnika")
+@app.route("/api/sharepost", methods=['POST'])
+def sharePost():
+    print("nesto zeza u requstuuu")
+    request_post=request.get_json();
+    
+    print(request_post)
+    p=Post(
+    request_post.get('Post', {}).get('id'),
+    request_post.get('Post', {}).get('title'),
+    request_post.get('Post', {}).get('content'),
+    request_post.get('Post', {}).get('author'),
+    request_post.get('Post', {}).get('created_at'),
+    request_post.get('Post', {}).get('upvotes'),
+    request_post.get('Post', {}).get('downvotes'),
+    request_post.get('Post', {}).get('comments'),
+    request_post.get('Post', {}).get('user_id'),
+    )
+    print(p.title)
+    insert_post(p);
+    return jsonify(messag="Post je uspesno kriran i upisan u bazu")
+
 if __name__=="__main__":
     app.run(debug=True)

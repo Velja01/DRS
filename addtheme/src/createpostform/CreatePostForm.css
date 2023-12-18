@@ -1,0 +1,15 @@
+.main-container {
+    display: flex;
+    align-items: center;
+    height: 100vh; /* 100% visine ekrana */
+  }
+  .posts-wrapper {
+    display: flex;
+    flex-wrap: wrap; /* Omogućava prelamanje na novi red ako nema dovoljno prostora */
+  }
+  
+  .post {
+    /* Dodajte dodatne stilizacije za svaki pojedinačni post */
+    margin: 10px; /* Opciono: dodajte razmak između postova */
+  }
+    

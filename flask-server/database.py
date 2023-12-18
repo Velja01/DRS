@@ -24,6 +24,7 @@ CREATE TABLE IF NOT EXISTS Users (
     broj_telefona VARCHAR(20) NOT NULL,
     email VARCHAR(255) NOT NULL,
     lozinka VARCHAR(255) NOT NULL
+    
 )
 """
 cursor.execute(create_table_query)

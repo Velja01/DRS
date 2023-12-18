@@ -20,6 +20,7 @@ export default function Actions(){
 
     }
     return <div className="actions">
+        <a href="/AddTheme"><Button label="ADD THEME" onClick={onclickLogIn}></Button></a>
         <a href="/LogIn"><Button label="LOG IN" onClick={onclickLogIn}/></a>
         <a href="/SignUp"><Button label="SIGN UP" onClick={onclickSignUp}/></a>
         <div className="profile hoverable">

@@ -12,12 +12,12 @@ def get_posts_data():
     connection = mysql.connector.connect(**db_config)
     cursor = connection.cursor()
 
-    select_posts_query = "SELECT id, title, content, author, created_at, upvotes, downvotes, comments FROM Posts"
+    select_posts_query = "SELECT id, title, content, author, created_at, upvotes, downvotes, comments, user_id FROM Posts"
     cursor.execute(select_posts_query)
 
     posts_data = []
-    for (post_id, title, content, author, created_at, upvotes, downvotes, comments) in cursor.fetchall():
-        post = Post(post_id, title, content, author, created_at, upvotes, downvotes, comments)
+    for (post_id, title, content, author, created_at, upvotes, downvotes, comments, user_id) in cursor.fetchall():
+        post = Post(post_id, title, content, author, created_at, upvotes, downvotes, comments, user_id)
         posts_data.append(post)
 
     cursor.close()
