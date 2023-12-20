@@ -4,8 +4,8 @@ import datetime
 
 
 class Post:
-    def __init__(self, id, title, content, author, created_at, upvotes, downvotes, comments, user_id):
-        self.id = id
+    def __init__(self, id1, title, content, author, created_at, upvotes, downvotes, comments, user_id):
+        self.id = id1
         self.title = title
         self.content = content
         self.author = author

@@ -7,6 +7,7 @@ import { CiBookmark } from "react-icons/ci";
 import './Posts.css';
 
 interface Post {
+  id:number;
   title: string;
   content: string;
   author: string;
@@ -37,7 +38,31 @@ export default function Posts({ sortBy }: PostsProps) {
     }
     return sortedData;
   }, []);
-
+  const handleClick = async (postId: number, likeDislike: string) => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/posts/vote`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id:postId,
+          likeDislike: likeDislike,
+        }),
+      });
+      const rezultat=await response.json();
+      if (rezultat.ok) {
+        // Uspesan odgovor od servera, mozete azurirati podatke ili obaviti dodatne operacije
+        console.log(`Uspesan ${likeDislike} za post sa ID ${postId}`);
+      } else {
+        // Greska od servera
+        console.error(`Greska prilikom ${likeDislike} za post sa ID ${postId}`);
+      }
+    } catch (error) {
+      // Greska prilikom slanja zahteva
+      console.error(`Greska prilikom slanja zahteva za ${likeDislike} za post sa ID ${postId}`, error);
+    }
+  };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -66,8 +91,8 @@ export default function Posts({ sortBy }: PostsProps) {
           {data.map((post, index) => (
             <div key={index} className="post">
               <div className="post-sidebar">
-                <BiUpvote className="upvote" /><p>{post.upvotes || 0}</p>
-                <BiDownvote className="downvote" />
+              <BiUpvote onClick={() => handleClick(post.id, 'like')} className="upvote" /><p>{post.upvotes || 0}</p>
+                <BiDownvote onClick={() => handleClick(post.id, 'dislike')} className="downvote" />
               </div>
               <div className="post-title">
                 <span className="post-user">Posted by</span>

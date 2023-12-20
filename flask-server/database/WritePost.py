@@ -44,3 +44,39 @@ def insert_post(post):
     # Zatvori kursor i konekciju
     cursor.close()
     connection.close()
+
+def changePostInfo(post_id, likeDislike):
+    db_config = {
+        'host': 'localhost',
+        'user': 'root',
+        'password': 'password123',
+        'database': 'RedditBase',
+    }
+
+    connection = mysql.connector.connect(**db_config)
+    cursor = connection.cursor()
+
+    # Proveri da li je vrednost likeDislike 'like' ili 'dislike'
+    if likeDislike not in ['like', 'dislike']:
+        # Ako nije ni 'like' ni 'dislike', baci izuzetak ili obradi grešku na odgovarajući način
+        raise ValueError("Vrednost likeDislike mora biti 'like' ili 'dislike'.")
+
+    # Na osnovu vrednosti likeDislike, izaberi odgovarajući operator (+1 za like, -1 za dislike)
+    operator = '+' if likeDislike == 'like' else '-'
+
+    # SQL upit za ažuriranje vrednosti upvotes za određeni post
+    update_upvotes_query = f"""
+    UPDATE posts
+    SET upvotes = upvotes {operator} 1
+    WHERE id = %s
+    """
+
+    # Izvrši upit za ažuriranje
+    cursor.execute(update_upvotes_query, (post_id,))
+
+    # Potvrdi promene u bazi
+    connection.commit()
+
+    # Zatvori kursor i konekciju
+    cursor.close()
+    connection.close()

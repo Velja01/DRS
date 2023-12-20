@@ -2,7 +2,7 @@ from flask import Flask, g, request, jsonify, render_template
 from flask_cors import CORS
 from database.ReadPosts import get_posts_data
 from database.ReadUsers import get_users_data
-from database.WritePost import insert_post
+from database.WritePost import insert_post, changePostInfo
 from views import views
 from classes.user import User
 from classes.post import Post
@@ -214,6 +214,17 @@ def sharePost():
     print(p.title)
     insert_post(p);
     return jsonify(messag="Post je uspesno kriran i upisan u bazu")
-
+@app.route("/api/posts/vote", methods=['POST'])
+def votes():
+    print("ne radi")
+    request_data=request.get_json();
+    postId=request_data.get('id')
+    postVote=request_data.get('likeDislike')
+    print(postId)
+    print(postVote)
+    
+    
+    changePostInfo(postId, postVote)
+    return jsonify(message="izmenjeno")
 if __name__=="__main__":
     app.run(debug=True)
