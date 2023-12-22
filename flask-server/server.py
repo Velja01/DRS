@@ -1,5 +1,6 @@
 from flask import Flask, g, request, jsonify, render_template
 from flask_cors import CORS
+import mysql
 from database.ReadPosts import get_posts_data
 from database.ReadUsers import get_users_data
 from database.WritePost import insert_post, changePostInfo
@@ -10,6 +11,9 @@ from database.WriteUser import insert_user, update_user
 app = Flask(__name__, static_url_path="/assets",
             static_folder="assets", template_folder="template")
 CORS(app)
+
+myconn = mysql.connector.connect(host = "localhost", user = "root",passwd = "password123", database = "redditBase")  
+
 app.config['logged_user'] = None
 @app.get("/")
 def getHome():
@@ -39,7 +43,8 @@ def home():
         "upvotes": post.upvotes,
         "downvotes": post.downvotes,
         "comments": post.comments,
-        "user_id":post.user_id
+        "user_id":post.user_id,
+        "allowcomms":post.allowcomms
     } for post in posts_data
     ]
 
@@ -210,21 +215,58 @@ def sharePost():
     request_post.get('Post', {}).get('downvotes'),
     request_post.get('Post', {}).get('comments'),
     request_post.get('Post', {}).get('user_id'),
+    request_post.get('Post', {}).get('allowcomms')
     )
     print(p.title)
     insert_post(p);
-    return jsonify(messag="Post je uspesno kriran i upisan u bazu")
+    return jsonify(message="Post je uspesno kriran i upisan u bazu")
 @app.route("/api/posts/vote", methods=['POST'])
 def votes():
-    print("ne radi")
+    
     request_data=request.get_json();
     postId=request_data.get('id')
     postVote=request_data.get('likeDislike')
-    print(postId)
-    print(postVote)
-    
-    
-    changePostInfo(postId, postVote)
-    return jsonify(message="izmenjeno")
+    if(app.config['logged_user']) is not None:
+        changePostInfo(postId, postVote)
+        return jsonify(message="radi")
+    if app.config['logged_user'] is None:
+        return jsonify(message="ne_radi")
+@app.delete("/api/deletepost/<postId>")
+def deletePost(postId):
+    try:
+
+        mycursor = myconn.cursor()
+        delete_query = "DELETE FROM posts WHERE id = %s"
+        mycursor.execute(delete_query, (postId,))
+
+        myconn.commit()
+
+        return jsonify(message=f"Post sa ID {postId} je uspešno obrisan.")
+    except Exception as e:
+        print("Greška pri brisanju posta:", e)
+        return jsonify(message="Došlo je do greške pri brisanju posta.")
+    finally:
+        # Zatvorite kursor nakon što završite
+        mycursor.close()
+@app.put("/api/updateallowcomms/<postId>")
+def updateAllowComms(postId):
+    try:
+        mycursor = myconn.cursor()
+        print(postId)
+        # Pretpostavljamo da vrednost za "allowcomms" dolazi kao JSON podaci u zahtevu
+        data = request.get_json()
+        allowcomms = data.get('allowcomms')
+        print(allowcomms)   
+        update_query = "UPDATE posts SET allowcomms = %s WHERE id = %s"
+        mycursor.execute(update_query, (allowcomms, postId))
+
+        myconn.commit()
+
+        return jsonify(message=f"Vrednost allowcomms za post sa ID {postId} je uspešno ažurirana.")
+    except Exception as e:
+        print("Greška pri ažuriranju allowcomms:", e)
+        return jsonify(message="Došlo je do greške pri ažuriranju allowcomms.")
+    finally:
+        mycursor.close()
 if __name__=="__main__":
     app.run(debug=True)

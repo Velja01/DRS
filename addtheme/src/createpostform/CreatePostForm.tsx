@@ -11,6 +11,7 @@ interface Post {
   downvotes: number;
   comments: number;
   user_id:number;
+  allowcomms:boolean;
 }
 
 interface User {
@@ -30,7 +31,7 @@ interface User {
 
 export default function CreatePostForm() {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
-
+  const[posts, setPosts]=useState<Post[]>([]);
   useEffect(() => {
     fetch("http://localhost:5000/api/getuser")
       .then(res => res.json())
@@ -42,7 +43,20 @@ export default function CreatePostForm() {
         console.error('Greška pri dohvatanju podataka:', error);
       });
   }, []);
-
+    useEffect(() => {
+      if (currentUser) {
+        fetch("http://localhost:5000/api/posts")
+          .then(res => res.json())
+          .then((data: { posts: Post[] }) => {
+            const userPosts = data.posts.filter((p: Post) => p.user_id === currentUser.id);
+            setPosts(userPosts);
+            console.log(data);
+          })
+         .catch(error => {
+           console.error('Greška pri dohvatanju podataka:', error);
+         });
+      }
+    }, [currentUser]);
   const [message, setMessage] = useState('');
   const [post, setPost] = useState<Post>({
     id: 0,
@@ -53,8 +67,39 @@ export default function CreatePostForm() {
     upvotes: 0,
     downvotes: 0,
     comments: 0,
-    user_id:currentUser ? currentUser.id : 0
+    user_id:currentUser ? currentUser.id : 0,
+    allowcomms:false
   });
+  const handleDeletePost = async (id:number) => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/deletepost/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const result = await response.json();
+      setMessage(result.message);
+      console.log('Server Response:', result);
+
+      // Ažurirajte posts nakon brisanja
+      if (currentUser) {
+        fetch("http://localhost:5000/api/posts")
+          .then(res => res.json())
+          .then((data: { posts: Post[] }) => {
+            const userPosts = data.posts.filter((p: Post) => p.user_id === currentUser.id);
+            setPosts(userPosts);
+            console.log(data);
+          })
+          .catch(error => {
+            console.error('Greška pri dohvatanju podataka:', error);
+          });
+      }
+    } catch (error) {
+      console.error('Greška pri brisanju posta:', error);
+    }
+  };
 
   const handleSubmit = async () => {
     try {
@@ -73,7 +118,7 @@ export default function CreatePostForm() {
         },
       };
 
-      console.log('Request Data:', requestData);
+      //console.log('Request Data:', requestData);
 
       const response = await fetch("http://localhost:5000/api/sharepost", {
         method: 'POST',
@@ -90,7 +135,30 @@ export default function CreatePostForm() {
       console.error('Greška pri slanju podataka na server:', error);
     }
   };
-
+  
+  const handleAllowCommsChange = async (postId: number) => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/updateallowcomms/${postId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          allowcomms: !post.allowcomms, // Obrni vrednost allowcomms
+        }),
+      });
+  
+      const result = await response.json();
+      console.log('Server Response:', result);
+  
+      // Ažurirajte vrednost u state-u
+      setPost({ ...post, allowcomms: !post.allowcomms });
+    } catch (error) {
+      console.error('Greška pri promeni statusa komentara:', error);
+    }
+  };
+  
+  
   return (
     <div className="main-container">
       <form >
@@ -118,6 +186,26 @@ export default function CreatePostForm() {
         <button onClick={handleSubmit}>Share post</button>
         <div>{message}</div>
       </form>
+      <div>
+        <h2>Your Posts:</h2>
+        <ul>
+          {posts.map((p) => (
+            <li key={p.id}>
+              <strong>{p.title}</strong>
+              <p>{p.content}</p>
+              <button onClick={()=>handleDeletePost(p.id)}>Delete post</button>
+              <label className="post">
+                Allow comments:
+                <input
+                 type="checkbox"
+                 checked={post?.allowcomms || false}
+                 onChange={()=>handleAllowCommsChange(p.id)}
+                  />
+            </label>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }

@@ -4,7 +4,7 @@ import datetime
 
 
 class Post:
-    def __init__(self, id1, title, content, author, created_at, upvotes, downvotes, comments, user_id):
+    def __init__(self, id1, title, content, author, created_at, upvotes, downvotes, comments, user_id, allowcomms):
         self.id = id1
         self.title = title
         self.content = content
@@ -14,5 +14,6 @@ class Post:
         self.downvotes = downvotes
         self.comments = comments,
         self.user_id=user_id
+        self.allowcomms=allowcomms
     def tuple(self):
-        return (self.id,self.title, self.content, self.author, self.created_at, self.upvotes, self.downvotes, self.comments, self.user_id)
+        return (self.id,self.title, self.content, self.author, self.created_at, self.upvotes, self.downvotes, self.comments, self.user_id, self.allowcomms)

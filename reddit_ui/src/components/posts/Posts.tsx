@@ -23,8 +23,9 @@ interface PostsProps {
 
 export default function Posts({ sortBy }: PostsProps) {
   const [data, setData] = useState<Post[]>([]);
+  
   const prevSortBy = useRef<string>("downvotes");
-
+  const [change, setChange]=useState<number>(0);
   const sortPosts = useCallback((posts: Post[], sortBy: string) => {
     let sortedData = [...posts];
     if (sortBy === 'leastcomments') {
@@ -32,7 +33,7 @@ export default function Posts({ sortBy }: PostsProps) {
     } else if (sortBy === 'upvotes') {
       sortedData.sort((a, b) => b.upvotes - a.upvotes);
     } else if (sortBy === 'downvotes') {
-      sortedData.sort((a, b) => b.downvotes - a.downvotes);
+      sortedData.sort((a, b) => a.upvotes - b.upvotes);
     } else if (sortBy === 'mostcomments') {
       sortedData.sort((a, b) => b.comments - a.comments);
     }
@@ -51,9 +52,11 @@ export default function Posts({ sortBy }: PostsProps) {
         }),
       });
       const rezultat=await response.json();
-      if (rezultat.ok) {
-        // Uspesan odgovor od servera, mozete azurirati podatke ili obaviti dodatne operacije
-        console.log(`Uspesan ${likeDislike} za post sa ID ${postId}`);
+      if (rezultat.message==="radi") {
+        // Uspesan odgovor od servera, azuriraj lokalno stanje
+        
+        setChange((prevChange) => prevChange + 1);
+
       } else {
         // Greska od servera
         console.error(`Greska prilikom ${likeDislike} za post sa ID ${postId}`);
@@ -64,7 +67,9 @@ export default function Posts({ sortBy }: PostsProps) {
     }
   };
   useEffect(() => {
+    
     const fetchData = async () => {
+      
       try {
         const response = await fetch("http://localhost:5000/api/posts");
         const data: { posts: Post[] } = await response.json();
@@ -77,11 +82,11 @@ export default function Posts({ sortBy }: PostsProps) {
     };
 
     // Ako je sortBy različito od prethodnog sortBy, onda pozovi fetch
-    if (sortBy !== prevSortBy.current) {
+    if (sortBy !== prevSortBy.current || change) {
       fetchData();
     }
-  }, [sortBy, sortPosts]);
-
+  }, [sortBy, sortPosts, change]);
+  
   return (
     <div style={{ textAlign: 'center' }}>
       {(data === null || data.length === 0) ? (
@@ -98,6 +103,7 @@ export default function Posts({ sortBy }: PostsProps) {
                 <span className="post-user">Posted by</span>
                 <span className="post-user underline">u/{post.author || 'Nepoznat'}</span>
                 <span className="created">Created: {post.created_at || 'Nepoznato'}</span>
+                <span><button >Join</button></span>
                 <span className="spacer"></span>
               </div>
               <div className="post-body">
