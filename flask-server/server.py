@@ -1,3 +1,4 @@
+import json
 from flask import Flask, g, request, jsonify, render_template
 from flask_cors import CORS
 import mysql
@@ -44,7 +45,8 @@ def home():
         "downvotes": post.downvotes,
         "comments": post.comments,
         "user_id":post.user_id,
-        "allowcomms":post.allowcomms
+        "allowcomms":post.allowcomms,
+        "allcomms":post.allcomms
     } for post in posts_data
     ]
 
@@ -201,7 +203,18 @@ def changeUserInfo():
     return jsonify(message="Izmenili ste vrednosti korisnika")
 @app.route("/api/sharepost", methods=['POST'])
 def sharePost():
-    print("nesto zeza u requstuuu")
+    mycursor = myconn.cursor()
+ 
+    post_id=2;
+    sql = f"SELECT allcomms FROM Posts WHERE id = {post_id}"
+    mycursor.execute(sql)
+    
+    result = mycursor.fetchone()
+    allcomms_json = result[0]
+
+    # Pretvorite JSON string u Python listu (ili objekat, zavisno od formata)
+    allcomms_list = json.loads(allcomms_json)
+    print(allcomms_list)
     request_post=request.get_json();
     
     print(request_post)
@@ -215,9 +228,10 @@ def sharePost():
     request_post.get('Post', {}).get('downvotes'),
     request_post.get('Post', {}).get('comments'),
     request_post.get('Post', {}).get('user_id'),
-    request_post.get('Post', {}).get('allowcomms')
+    request_post.get('Post', {}).get('allowcomms'),
+    request_post.get('Post', {}).get('allcomms')
     )
-    print(p.title)
+    print(p.allcomms)
     insert_post(p);
     return jsonify(message="Post je uspesno kriran i upisan u bazu")
 @app.route("/api/posts/vote", methods=['POST'])
@@ -268,5 +282,29 @@ def updateAllowComms(postId):
         return jsonify(message="Došlo je do greške pri ažuriranju allowcomms.")
     finally:
         mycursor.close()
+@app.put("/api/posts/addcomment/<postId>")
+def add_comment(postId):
+    try:
+        
+        mycursor = myconn.cursor()
+        print(postId)
+        # Pretpostavljamo da vrednost za "newComment" dolazi kao JSON podaci u zahtevu
+        data = request.get_json()
+        new_comment = data.get('newComment')
+        print(new_comment)
+        update_query = "UPDATE posts SET allcomms = JSON_ARRAY_APPEND(allcomms, '$', %s) WHERE id = %s"
+        if(app.config["logged_user"] is None):
+            return jsonify(message="log")
+        mycursor.execute(update_query, (new_comment, postId))
+
+        myconn.commit()
+
+        return jsonify(message="success")
+    except Exception as e:
+        print("Greška pri dodavanju komentara:", e)
+        return jsonify(message="Došlo je do greške pri dodavanju komentara.")
+    finally:
+        mycursor.close()
+
 if __name__=="__main__":
     app.run(debug=True)

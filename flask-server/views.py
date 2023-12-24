@@ -18,7 +18,8 @@ def home():
         "created_at": post.created_at,
         "upvotes": post.upvotes,
         "downvotes": post.downvotes,
-        "comments": post.comments
+        "comments": post.comments,
+        "allcomms":post.allcomms
     } for post in posts_data
     ]
 

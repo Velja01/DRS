@@ -9,7 +9,7 @@
     border-top-left-radius: var(--border-radius);
     border-top-right-radius: var(--border-radius);
     height: 80px;
-    background-image: url("C:/Users/veljk/Desktop/drsvezba/drsvezba/reddit_ui/public/assets/images/communities.jpg");
+    background-image: url("C:/Users/veljk/Desktop/drsvezba/DRS/reddit_ui/public/assets/images/communities.jpg");
 }
 
 .community-section .title>span {

@@ -12,6 +12,7 @@ interface Post {
   comments: number;
   user_id:number;
   allowcomms:boolean;
+  allcomms:[];
 }
 
 interface User {
@@ -68,7 +69,8 @@ export default function CreatePostForm() {
     downvotes: 0,
     comments: 0,
     user_id:currentUser ? currentUser.id : 0,
-    allowcomms:false
+    allowcomms:false,
+    allcomms:[]
   });
   const handleDeletePost = async (id:number) => {
     try {
@@ -114,7 +116,8 @@ export default function CreatePostForm() {
           upvotes: post.upvotes,
           downvotes: post.downvotes,
           comments: post.comments,
-          user_id:currentUser?.id
+          user_id:currentUser?.id,
+          allcomms:post.allcomms
         },
       };
 
