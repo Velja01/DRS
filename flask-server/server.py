@@ -1,6 +1,7 @@
 import json
 from flask import Flask, g, request, jsonify, render_template
 from flask_cors import CORS
+from flask_mail import Mail, Message
 import mysql
 from database.ReadPosts import get_posts_data
 from database.ReadUsers import get_users_data
@@ -15,7 +16,19 @@ CORS(app)
 
 myconn = mysql.connector.connect(host = "localhost", user = "root",passwd = "password123", database = "redditBase")  
 
-app.config['logged_user'] = None
+# Postavke za Flask-Mail
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
+app.config['MAIL_USERNAME'] = 'veljkoklincov99@gmail.com'
+app.config['MAIL_PASSWORD'] = 'qhqi udwe zkva sykx'
+app.config['MAIL_DEFAULT_SENDER'] = 'veljkoklincov99@gmail.com'
+
+mail = Mail(app)
+
+
+app.config['logged_user'] = None  
 @app.get("/")
 def getHome():
     return render_template("pocetna/index.html")
@@ -204,20 +217,21 @@ def changeUserInfo():
 @app.route("/api/sharepost", methods=['POST'])
 def sharePost():
     mycursor = myconn.cursor()
- 
-    post_id=2;
-    sql = f"SELECT allcomms FROM Posts WHERE id = {post_id}"
-    mycursor.execute(sql)
-    
-    result = mycursor.fetchone()
-    allcomms_json = result[0]
-
-    # Pretvorite JSON string u Python listu (ili objekat, zavisno od formata)
-    allcomms_list = json.loads(allcomms_json)
-    print(allcomms_list)
+    users=get_users_data()
     request_post=request.get_json();
     
     print(request_post)
+    #post_id=request_post.get('Post', {}).get('user_id')
+    #sql = f"SELECT allcomms FROM Posts WHERE id = {post_id}"
+    #mycursor.execute(sql)
+    
+    #result = mycursor.fetchone()
+    #allcomms_json = result[0]
+
+    # Pretvorite JSON string u Python listu (ili objekat, zavisno od formata)
+    #allcomms_list = json.loads(allcomms_json)
+    #print(allcomms_list)
+    
     p=Post(
     request_post.get('Post', {}).get('id'),
     request_post.get('Post', {}).get('title'),
@@ -233,6 +247,9 @@ def sharePost():
     )
     print(p.allcomms)
     insert_post(p);
+    for user in users:
+        send_post_email(user.email, p)
+    
     return jsonify(message="Post je uspesno kriran i upisan u bazu")
 @app.route("/api/posts/vote", methods=['POST'])
 def votes():
@@ -305,6 +322,26 @@ def add_comment(postId):
         return jsonify(message="Došlo je do greške pri dodavanju komentara.")
     finally:
         mycursor.close()
+@app.put("/api/posts/join/<postid>")
+def joinTheme(postid):
+    mycursor = myconn.cursor()
+    user_id=app.config["logged_user"]["id"]
+    print(user_id)
+    if(app.config["logged_user"] is None):
+        return jsonify(message="log")
+    update_query="UPDATE posts set joined=JSON_ARRAY_APPEND(joined, '$', %s) where id=%s"
+    mycursor.execute(update_query, (user_id, postid))
+    myconn.commit()
+    return jsonify(message="success");
 
+def send_post_email(recipient_email, post):
+    # Kreirajte email poruku
+    subject = f"Novi post: {post.title}"
+    body = f"Novi post je kreiran:\n\nNaslov: {post.title}\nSadržaj: {post.content}\n\nPogledajte post i lajkujte ga na {request.host_url}"
+
+    # Slanje email poruke
+    message = Message(subject=subject, body=body, recipients=[recipient_email])
+    mail.send(message)
+    
 if __name__=="__main__":
     app.run(debug=True)

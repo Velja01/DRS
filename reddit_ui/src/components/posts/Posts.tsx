@@ -18,7 +18,17 @@ interface Post {
   allowcomms: boolean;
   allcomms: string[];
 }
-
+interface User {
+  id: number;
+  ime: string;
+  prezime: string;
+  adresa: string;
+  grad: string;
+  drzava: string;
+  broj_telefona: string;
+  email: string;
+  lozinka: string;
+}
 interface PostsProps {
   sortBy: string;
 }
@@ -26,6 +36,8 @@ interface PostsProps {
 export default function Posts({ sortBy }: PostsProps) {
   const [data, setData] = useState<Post[]>([]);
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
+
+  const [userData, setUserData] = useState<User | null>(null);
 
   const prevSortBy = useRef<string>("downvotes");
   const [change, setChange] = useState<number>(0);
@@ -85,7 +97,35 @@ export default function Posts({ sortBy }: PostsProps) {
       console.error('Greška prilikom slanja zahteva za dodavanje komentara:', error);
     }
   };
+  const JoinTheme = async (postId: number) => {
+    console.log("upada");
+    try {
+      const responseUser = await fetch("http://localhost:5000/api/getuser");
+      const dataUser = await responseUser.json();
+      console.log("upada");
+      setUserData(dataUser.user);
   
+      if (userData != null) {
+        const responseJoin = await fetch(`http://localhost:5000/api/posts/join/${postId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+  
+        const result = await responseJoin.json();
+        if (result === "success") {
+          console.log("uspesno ste se joinovali");
+        } else {
+          console.log("greska prilikom joinovanja");
+        }
+      } else {
+        console.log("Morate se ulogovati");
+      }
+    } catch (error) {
+      console.error('Greška prilikom izvršavanja JoinTheme:', error);
+    }
+  };
   
 
   const handleClick = async (postId: number, likeDislike: string) => {
@@ -149,7 +189,7 @@ export default function Posts({ sortBy }: PostsProps) {
                 <span className="post-user">Posted by</span>
                 <span className="post-user underline">u/{post.author || 'Nepoznat'}</span>
                 <span className="created">Created: {post.created_at || 'Nepoznato'}</span>
-                <span><button>Join</button></span>
+                <span><button onClick={()=>JoinTheme(post.id)}>Join</button></span>
                 <span className="spacer"></span>
               </div>
               <div className="post-body">
