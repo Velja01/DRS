@@ -57,7 +57,7 @@ export default function CreatePostForm() {
            console.error('Greška pri dohvatanju podataka:', error);
          });
       }
-    }, [currentUser]);
+    }, [currentUser, posts]);
   const [message, setMessage] = useState('');
   const [post, setPost] = useState<Post>({
     id: 0,
@@ -117,11 +117,12 @@ export default function CreatePostForm() {
           downvotes: post.downvotes,
           comments: post.comments,
           user_id:currentUser?.id,
+          allowcomms:true,
           allcomms:post.allcomms
         },
       };
 
-      //console.log('Request Data:', requestData);
+      console.log('Request Data:', requestData);
 
       const response = await fetch("http://localhost:5000/api/sharepost", {
         method: 'POST',
@@ -164,7 +165,12 @@ export default function CreatePostForm() {
   
   return (
     <div className="main-container">
-      <form >
+      
+      <div>
+      
+        <h2 className="title">Add Theme</h2>
+        <img className='img' src="./assets/images/reddit_logo.jpg" alt=""></img>
+        <br/>
         <label className="post">
           Naslov:
           <input
@@ -186,17 +192,17 @@ export default function CreatePostForm() {
           />
         </label>
         <br />
-        <button onClick={handleSubmit}>Share post</button>
+        <button className="button1" onClick={handleSubmit}>Share post</button>
         <div>{message}</div>
-      </form>
+      </div>
       <div>
-        <h2>Your Posts:</h2>
+        <h2 >Your Posts:</h2>
         <ul>
           {posts.map((p) => (
             <li key={p.id}>
               <strong>{p.title}</strong>
               <p>{p.content}</p>
-              <button onClick={()=>handleDeletePost(p.id)}>Delete post</button>
+              <button className="button" onClick={()=>handleDeletePost(p.id)}>Delete post</button>
               <label className="post">
                 Allow comments:
                 <input

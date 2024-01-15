@@ -17,8 +17,8 @@ def insert_post(post):
 
     # SQL upit za unos posta (preskače se polje 'id' jer je auto increment)
     insert_post_query = """
-    INSERT INTO posts (title, content, author, created_at, upvotes, downvotes, comments, user_id) 
-    VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+    INSERT INTO posts (title, content, author, created_at, upvotes, downvotes, comments, user_id, allowcomms, likes) 
+    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
 """
 
     
@@ -31,7 +31,9 @@ def insert_post(post):
     post.upvotes,
     post.downvotes,
     0,
-    post.user_id
+    post.user_id,
+    True,
+    0
     )
 
 

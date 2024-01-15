@@ -41,7 +41,9 @@ export default function LogInPage() {
 // ...
 
   return (
-    <div>
+    <div className='hero'>
+      <label className='title'>Log In</label>
+      <img className='img' src="./assets/images/reddit_logo.jpg" alt=""></img>
       <p>Username: </p>
       <input
         type="text"
@@ -55,10 +57,11 @@ export default function LogInPage() {
         onChange={(e) => setPassword(e.target.value)}
       />
       <br />
-      <button onClick={handleLogin}>Log In</button>
+      <div className='button'>
+      <button className='first-child' onClick={handleLogin}>Log In</button>
       <div>{message}</div><br/>
-      <div><a href='/'><button>Back to Main Page</button></a></div>
-      
+      <div><a href='/'><button className='last-child'>Back to Main Page</button></a></div>
+      </div>
     </div>
   );
 }

@@ -1,15 +1,46 @@
 .main-container {
     display: flex;
     align-items: center;
-    height: 100vh; /* 100% visine ekrana */
-  }
+    border: 1px solid black;
+    background-color: white;
+    position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    padding: 25px;
+    
+}
+h2{
+  display: inline-block;
+
+}
+.img{
+  height: 38px ;
+  width: 32px;
+  margin-left: 15px;
+}
   .posts-wrapper {
     display: flex;
-    flex-wrap: wrap; /* Omogućava prelamanje na novi red ako nema dovoljno prostora */
+    flex-wrap: wrap; 
   }
   
   .post {
-    /* Dodajte dodatne stilizacije za svaki pojedinačni post */
-    margin: 10px; /* Opciono: dodajte razmak između postova */
-  }
     
+    margin: 10px; 
+  }
+.title{
+  
+  font-weight: bold;
+  text-align: center;
+}
+.button{
+  text-align: center;
+  display: inline-block;
+  background-color: orange;
+}
+.button1{
+  margin-top: 15px;
+  text-align: center;
+  display: inline-block;
+  background-color: orange;
+}

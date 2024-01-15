@@ -60,6 +60,9 @@ export default function SignUp() {
 
     return (
         <div className="form-container">
+          <h2>Sign Up </h2>
+          <img className='img' src="./assets/images/reddit_logo.jpg" alt=""></img>
+          <div className="red"> 
           <label className="form-label">Ime:</label>
           <input
             type="text"
@@ -67,7 +70,8 @@ export default function SignUp() {
             value={userData.ime}
             onChange={(e) => setUserData({ ...userData, ime: e.target.value })}
           />
-    
+          </div>
+          <div className="red"> 
           <label className="form-label">Prezime:</label>
           <input
             type="text"
@@ -75,7 +79,8 @@ export default function SignUp() {
             value={userData.prezime}
             onChange={(e) => setUserData({ ...userData, prezime: e.target.value })}
           />
-    
+          </div>
+          <div className="red"> 
           <label className="form-label">Adresa:</label>
           <input
             type="text"
@@ -83,7 +88,8 @@ export default function SignUp() {
             value={userData.adresa}
             onChange={(e) => setUserData({ ...userData, adresa: e.target.value })}
           />
-    
+          </div>
+          <div className="red"> 
           <label className="form-label">Grad:</label>
           <input
             type="text"
@@ -91,7 +97,8 @@ export default function SignUp() {
             value={userData.grad}
             onChange={(e) => setUserData({ ...userData, grad: e.target.value })}
           />
-    
+          </div>
+          <div className="red"> 
           <label className="form-label">Drzava:</label>
           <input
             type="text"
@@ -99,7 +106,8 @@ export default function SignUp() {
             value={userData.drzava}
             onChange={(e) => setUserData({ ...userData, drzava: e.target.value })}
           />
-    
+          </div>
+          <div className="red"> 
           <label className="form-label">Broj telefona:</label>
           <input
             type="text"
@@ -107,7 +115,8 @@ export default function SignUp() {
             value={userData.broj_telefona}
             onChange={(e) => setUserData({ ...userData, broj_telefona: e.target.value })}
           />
-    
+          </div>
+          <div className="red"> 
           <label className="form-label">Email:</label>
           <input
             type="text"
@@ -115,7 +124,8 @@ export default function SignUp() {
             value={userData.email}
             onChange={(e) => setUserData({ ...userData, email: e.target.value })}
           />
-    
+          </div>
+          <div className="red"> 
           <label className="form-label">Lozinka:</label>
           <input
             type="password"
@@ -123,10 +133,10 @@ export default function SignUp() {
             value={userData.lozinka}
             onChange={(e) => setUserData({ ...userData, lozinka: e.target.value })}
           />
-    
-          <button className="form-button" onClick={handleSignup}>Sign Up</button>
+          </div>
+          <div><button className="form-button" onClick={handleSignup}>Sign Up</button></div>
           <div className="form-message">{message}</div><br/>
-          <div><a href="/"><button>Home</button></a></div>
+          <div><a href="/"><button className="form-button">Home</button></a></div>
         </div>
       );
 }

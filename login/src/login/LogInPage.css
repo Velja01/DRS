@@ -1,0 +1,40 @@
+.hero{
+
+    height: 380px;
+    width: 480px;
+    background-color: white;
+    padding-top: 30px;
+    border: 2px  solid #000;
+   
+    border-radius: 17px;
+    border-color: black;
+    
+}
+.img{
+    height: 38px ;
+    width: 32px;
+    margin-bottom: -8px;
+    margin-left: 15px;
+}
+.title{
+    
+    font-size: 32px;
+    font-weight: bold;
+    align-items: center;
+}
+.button{
+    margin-top: 50px;
+    flex-direction: row;
+    display: flex;
+    column-gap: 10px;
+    margin-left: 100px;
+}
+.button :first-child{
+    background-color: orange;
+    
+}
+.button :last-child{
+    background-color: orange;
+    border-radius: 5px; 
+    
+}

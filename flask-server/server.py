@@ -242,10 +242,10 @@ def sharePost():
     request_post.get('Post', {}).get('downvotes'),
     request_post.get('Post', {}).get('comments'),
     request_post.get('Post', {}).get('user_id'),
-    request_post.get('Post', {}).get('allowcomms'),
+    True,
     request_post.get('Post', {}).get('allcomms')
     )
-    print(p.allcomms)
+    
     insert_post(p);
     for user in users:
         send_post_email(user.email, p)
@@ -309,7 +309,9 @@ def add_comment(postId):
         data = request.get_json()
         new_comment = data.get('newComment')
         print(new_comment)
-        update_query = "UPDATE posts SET allcomms = JSON_ARRAY_APPEND(allcomms, '$', %s) WHERE id = %s"
+        update_query = "UPDATE posts SET allcomms = JSON_ARRAY_APPEND(allcomms, '$', %s), comments = comments + 1 WHERE id = %s"
+        if(new_comment is None):
+            return jsonify(message="prazan")
         if(app.config["logged_user"] is None):
             return jsonify(message="log")
         mycursor.execute(update_query, (new_comment, postId))
@@ -324,11 +326,19 @@ def add_comment(postId):
         mycursor.close()
 @app.put("/api/posts/join/<postid>")
 def joinTheme(postid):
+    joined=json.loads(get_joined_values(postid))
+    print(joined)
+    posts=get_posts_data();
+    
+    user=app.config["logged_user"]
     mycursor = myconn.cursor()
-    user_id=app.config["logged_user"]["id"]
-    print(user_id)
     if(app.config["logged_user"] is None):
         return jsonify(message="log")
+    user_id=app.config["logged_user"]["id"]
+    print(user_id)
+    if user_id in joined:
+        return jsonify(message="joined")
+    
     update_query="UPDATE posts set joined=JSON_ARRAY_APPEND(joined, '$', %s) where id=%s"
     mycursor.execute(update_query, (user_id, postid))
     myconn.commit()
@@ -342,6 +352,20 @@ def send_post_email(recipient_email, post):
     # Slanje email poruke
     message = Message(subject=subject, body=body, recipients=[recipient_email])
     mail.send(message)
+
+def get_joined_values(postid):
+    mycursor = myconn.cursor()
+    select_query = "SELECT joined FROM posts WHERE id = %s"
+    mycursor.execute(select_query, (postid,))
+    result = mycursor.fetchone()
     
+    if result:
+        joined_values = result[0]
+        
+        return (joined_values)
+    else:
+        return jsonify(message="Post not found")
+
+
 if __name__=="__main__":
     app.run(debug=True)

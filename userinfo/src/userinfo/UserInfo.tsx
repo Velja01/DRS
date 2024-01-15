@@ -70,107 +70,136 @@ export default function UserInfo(){
         });
     }, []);
     return (
-      <div>
+      <div className='okvir'>
+        <img className='img' src="./assets/images/reddit_logo.jpg" alt=""></img>
+      <h2>USER INFO</h2>
+      <hr></hr>
+      
+      <div className='okvir2'>
         {(user === null) ? (
           <p>Loading items...</p>
         ) : (
-        <div className="form-container">
-        
+
+        <div className="margin">
           
-          <label className="form-label">Ime:
-          <label
-            className="form-input"
-          >{user.ime}</label></label>
-          <label className='form-label'>Novo ime</label>
+          <div className='row'>
+          <label className="form-label-bold">Ime:</label>
+          <label className="form-label">{user.ime}</label>
+          </div>
+
+          <div className='row'>
+          <label className="form-label-bold">Prezime:</label>
+          <label className="form-label">{user.prezime}</label>
+          </div>
+
+          <div className='row'>  
+          <label className="form-label-bold">Adresa:</label>
+          <label className="form-label">{user.adresa}</label>
+          </div>
+
+          <div className='row'>
+          <label className="form-label-bold">Grad:</label>
+          <label className="form-label">{user.grad}</label>
+          </div>
+
+          <div className='row'>
+          <label className="form-label-bold">Drzava:</label>
+          <label className="form-label">{user.drzava}</label>
+          </div>
+
+          <div className='row'>
+          <label className="form-label-bold">Broj telefona:</label>
+          <label className="form-label">{user.broj_telefona}</label>
+          </div>
+
+          <div className='row'>
+          <label className="form-label-bold">Email:</label>
+          <label className="form-label">{user.email}</label>
+          </div>
+
+          <div className='row'>
+          <label className="form-label-bold">Lozinka:</label>
+          <label className="form-label">{user.lozinka}</label>
+          </div>
+
+          </div>
+          
+        
+        )}
+      
+      <div className='margin'>
+        <div className='row'>
+        <label className='form-label-bold'>Novo ime</label>
           <input
             type='text'
             className='form-input'
             onChange={(e) => setUserData({ ...userData, ime: e.target.value })}
           />
-    
-          <label className="form-label">Prezime:
-          <label
-            className="form-input"
-          >{user.prezime}</label></label>
-          <label className='form-label'>Novo prezime</label>
-          <input
-            type='text'
-            className='form-input'
-            onChange={(e) => setUserData({ ...userData, prezime: e.target.value })}
+          </div>
+          <div className='row'>
+            <label className='form-label-bold'>Novo prezime</label>
+            <input
+              type='text'
+              className='form-input'
+              onChange={(e) => setUserData({ ...userData, prezime: e.target.value })}
           />
-
-          <label className="form-label">Adresa:
-          <label
-            className="form-input"
-          >{user.adresa}</label></label>
-          <label className='form-label'>Nova adresa</label>
+          </div>
+          <div className='row'>
+          <label className='form-label-bold'>Nova adresa</label>
           <input
             type='text'
             className='form-input'
             onChange={(e) => setUserData({ ...userData, adresa: e.target.value })}
           />
-    
-          <label className="form-label">Grad:
-          <label
-            className="form-input"
-          >{user.grad}</label></label>
-          <label className='form-label'>Novi grad</label>
+          </div>
+          <div className='row'>
+          <label className='form-label-bold'>Novi grad</label>
           <input
             type='text'
             className='form-input'
             onChange={(e) => setUserData({ ...userData, grad: e.target.value })}
           />
-    
-          <label className="form-label">Drzava:
-          <label
-            className="form-input"
-          >{user.drzava}</label></label>
-          <label className='form-label'>Nova drzava</label>
+          </div>
+          <div className='row'>
+          <label className='form-label-bold'>Nova drzava</label>
           <input
             type='text'
             className='form-input'
             onChange={(e) => setUserData({ ...userData, drzava: e.target.value })}
           />
-    
-          <label className="form-label">Broj telefona:
-          <label
-            className="form-input"
-          >{user.broj_telefona}</label></label>
-          <label className='form-label'>Novi Broj telefona</label>
+          </div>
+          <div className='row'>
+          <label className='form-label-bold'>Novi Broj telefona</label>
           <input
             type='text'
             className='form-input'
             onChange={(e) => setUserData({ ...userData, broj_telefona: e.target.value })}
           />
-    
-          <label className="form-label">Email:
-          <label
-            className="form-input"
-          >{user.email}</label></label>
-          <label className='form-label'>Novi email</label>
+          </div>
+          <div className='row'>
+            <label className='form-label-bold'>Novi email</label>
           <input
             type='text'
             className='form-input'
             onChange={(e) => setUserData({ ...userData, email: e.target.value })}
           />
-          <label className="form-label">Lozinka:
-          <label
-            className="form-input"
-          >{user.lozinka}</label></label>
-          <label className='form-label'>Nova lozinka</label>
+          </div>
+          <div className='row'>
+          <label className='form-label-bold'>Nova lozinka</label>
           <input
             type='password'
             className='form-input'
             onChange={(e) => setUserData({ ...userData, lozinka: e.target.value })}
           />
-    
-          <button className="form-button" onClick={handleChangeUser}>Sign Up</button>
-          <div className="form-message">{message}</div><br/>
-          <div><a href="/"><button>Home</button></a></div>
           </div>
-        
-        
-        )}
+
+          <button className="form-button1" onClick={handleChangeUser}>Change Users info</button>
+
+          <div className="form-message">{message}</div><br/>
+
+      </div>
+      </div>
+      <div><a href="/"><button className='form-button'>Home</button></a></div>
       </div>
       );
 }

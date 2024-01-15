@@ -2,8 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import { BiUpvote } from "react-icons/bi";
 import { BiDownvote } from "react-icons/bi";
 import { LiaCommentSolid } from "react-icons/lia";
-import { FaShare } from "react-icons/fa";
-import { CiBookmark } from "react-icons/ci";
+
 import './Posts.css';
 
 interface Post {
@@ -18,17 +17,7 @@ interface Post {
   allowcomms: boolean;
   allcomms: string[];
 }
-interface User {
-  id: number;
-  ime: string;
-  prezime: string;
-  adresa: string;
-  grad: string;
-  drzava: string;
-  broj_telefona: string;
-  email: string;
-  lozinka: string;
-}
+
 interface PostsProps {
   sortBy: string;
 }
@@ -37,8 +26,7 @@ export default function Posts({ sortBy }: PostsProps) {
   const [data, setData] = useState<Post[]>([]);
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
 
-  const [userData, setUserData] = useState<User | null>(null);
-
+  
   const prevSortBy = useRef<string>("downvotes");
   const [change, setChange] = useState<number>(0);
   const sortPosts = useCallback((posts: Post[], sortBy: string) => {
@@ -98,14 +86,11 @@ export default function Posts({ sortBy }: PostsProps) {
     }
   };
   const JoinTheme = async (postId: number) => {
-    console.log("upada");
+    
     try {
-      const responseUser = await fetch("http://localhost:5000/api/getuser");
-      const dataUser = await responseUser.json();
-      console.log("upada");
-      setUserData(dataUser.user);
+      
   
-      if (userData != null) {
+      
         const responseJoin = await fetch(`http://localhost:5000/api/posts/join/${postId}`, {
           method: 'PUT',
           headers: {
@@ -114,14 +99,13 @@ export default function Posts({ sortBy }: PostsProps) {
         });
   
         const result = await responseJoin.json();
-        if (result === "success") {
+        
+        if (result.message === "success") {
           console.log("uspesno ste se joinovali");
         } else {
           console.log("greska prilikom joinovanja");
         }
-      } else {
-        console.log("Morate se ulogovati");
-      }
+      
     } catch (error) {
       console.error('Greška prilikom izvršavanja JoinTheme:', error);
     }
@@ -171,7 +155,7 @@ export default function Posts({ sortBy }: PostsProps) {
     if (sortBy !== prevSortBy.current || change) {
       fetchData();
     }
-  }, [sortBy, sortPosts, change]);
+  }, [sortBy, sortPosts, change, data]);
 
   return (
     <div style={{ textAlign: 'center' }}>
@@ -227,13 +211,13 @@ export default function Posts({ sortBy }: PostsProps) {
                   )}
                 </div>
                 <div className="share footer-action">
-                  <FaShare />
-                  <span>Share</span>
+                {post.allcomms.map((comment, index) => (
+                          <div key={index} className="BiUpvote-container">
+                          <BiUpvote />
+                        </div>
+                        ))}
                 </div>
-                <div className="save footer-action">
-                  <CiBookmark />
-                  <span>Save</span>
-                </div>
+                
               </div>
             </div>
           ))}
