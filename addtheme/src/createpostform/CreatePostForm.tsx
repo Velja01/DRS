@@ -174,7 +174,7 @@ export default function CreatePostForm() {
         <label className="post">
           Naslov:
           <input
-            className="post"
+            className="input"
             type="text"
             name="title"
             value={post.title}
@@ -183,9 +183,9 @@ export default function CreatePostForm() {
         </label>
         <br />
         <label className="post">
-          Sadržaj:
+          <div className="margin">Sadržaj:</div>
           <textarea
-            className="post"
+            className="input"
             name="content"
             value={post.content}
             onChange={(e) => setPost({ ...post, content: e.target.value })}
@@ -193,6 +193,7 @@ export default function CreatePostForm() {
         </label>
         <br />
         <button className="button1" onClick={handleSubmit}>Share post</button>
+        <a href="/"><button className="button">Home</button></a>
         <div>{message}</div>
       </div>
       <div>
@@ -214,6 +215,7 @@ export default function CreatePostForm() {
             </li>
           ))}
         </ul>
+        
       </div>
     </div>
   );

@@ -137,7 +137,9 @@ export default function Posts({ sortBy }: PostsProps) {
       console.error(`Greska prilikom slanja zahteva za ${likeDislike} za post sa ID ${postId}`, error);
     }
   };
-
+  const handlelike=async()=>{
+    
+  }
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -155,7 +157,7 @@ export default function Posts({ sortBy }: PostsProps) {
     if (sortBy !== prevSortBy.current || change) {
       fetchData();
     }
-  }, [sortBy, sortPosts, change, data]);
+  }, [sortBy, sortPosts, change]);
 
   return (
     <div style={{ textAlign: 'center' }}>
@@ -189,9 +191,13 @@ export default function Posts({ sortBy }: PostsProps) {
                       <h3>Comments</h3>
                       <ul>
                         {post.allcomms.map((comment, index) => (
+                          <div className="like">
                           <li key={index}>{comment}</li>
+                          <BiUpvote className="like space" onClick={handlelike}/>
+                          </div>
                         ))}
                       </ul>
+                      {post.allowcomms && (
                       <form
                           onSubmit={(e) => {
                           e.preventDefault();
@@ -206,17 +212,11 @@ export default function Posts({ sortBy }: PostsProps) {
                         <textarea name="comment" placeholder="Add a comment"></textarea>
                         <button type="submit">Submit</button>
                       </form>
-
+                    )}
                     </div>
                   )}
                 </div>
-                <div className="share footer-action">
-                {post.allcomms.map((comment, index) => (
-                          <div key={index} className="BiUpvote-container">
-                          <BiUpvote />
-                        </div>
-                        ))}
-                </div>
+                
                 
               </div>
             </div>

@@ -132,14 +132,14 @@
     display: flex;
     flex-direction: column;
   }
-  .posts-wrapper .post .post-footer .footer-action:first-child {
-    margin-left: 0px;
+  .like{
+    flex-direction: row;
+    display: flex;
+    
   }
-  
-  .posts-wrapper .post .post-footer .footer-action:last-child {
-    margin-right: 0px;
+  .like .space{
+    padding-left: 10px;
   }
-  
   .posts-wrapper .post .post-footer .footer-action svg {
     margin-right: 5px;
   }
@@ -155,5 +155,6 @@
   
   .posts-wrapper .post .post-footer .footer-action:hover {
     border-radius: 5px;
-    background-color: rgb(230, 230, 230);
+    
   }
+  

@@ -12,7 +12,7 @@ def get_users_data():
     connection = mysql.connector.connect(**db_config)
     cursor = connection.cursor()
 
-    select_users_query = "SELECT id, ime, prezime, adresa, grad, drzava, broj_telefona, email, lozinka FROM Users"
+    select_users_query = "SELECT id, ime, prezime, adresa, grad, drzava, broj_telefona, email, lozinka FROM users"
     cursor.execute(select_users_query)
 
     users_data = []

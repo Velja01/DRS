@@ -1,19 +1,19 @@
 .main-container {
     display: flex;
     align-items: center;
-    border: 1px solid black;
+    border: 2px solid black;
     background-color: white;
     position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
     padding: 25px;
-    
+    border-radius: 17px;
 }
 h2{
   display: inline-block;
-
 }
+
 .img{
   height: 38px ;
   width: 32px;
@@ -23,7 +23,11 @@ h2{
     display: flex;
     flex-wrap: wrap; 
   }
-  
+  .input{
+    margin: 10px;
+    border: solid 2px black;
+    border-radius: 5px;
+  }
   .post {
     
     margin: 10px; 
@@ -37,10 +41,14 @@ h2{
   text-align: center;
   display: inline-block;
   background-color: orange;
+  margin-left: 5px;
 }
 .button1{
   margin-top: 15px;
   text-align: center;
   display: inline-block;
   background-color: orange;
+}
+.margin{
+  margin-left: 10px;
 }

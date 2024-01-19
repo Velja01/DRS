@@ -13,7 +13,7 @@ def get_posts_data():
     connection = mysql.connector.connect(**db_config)
     cursor = connection.cursor()
 
-    select_posts_query = "SELECT id, title, content, author, created_at, upvotes, downvotes, comments, user_id, allowcomms, allcomms FROM Posts"
+    select_posts_query = "SELECT id, title, content, author, created_at, upvotes, downvotes, comments, user_id, allowcomms, allcomms FROM posts"
     cursor.execute(select_posts_query)
 
     posts_data = []
