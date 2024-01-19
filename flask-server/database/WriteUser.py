@@ -13,7 +13,7 @@ def insert_user(user):
     cursor = connection.cursor()
 
     # SQL upit za unos korisnika (preskače se polje 'id' jer je auto increment)
-    insert_user_query = "INSERT INTO users (ime, prezime, adresa, grad, drzava, broj_telefona, email, lozinka) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+    insert_user_query = "INSERT INTO users (ime, prezime, adresa, grad, drzava, broj_telefona, email, lozinka) VALUES (%s, %s, %s, %s, %s, %s, %s, %s);"
     
     # Dohvati tuple vrednosti iz objekta korisnika
     user_data = user.to_tuple()
